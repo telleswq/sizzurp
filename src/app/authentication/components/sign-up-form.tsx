@@ -1,6 +1,6 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Sign } from "crypto";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -15,8 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
@@ -26,24 +26,27 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
-const formSchema = z.object({
-  name: z.string("Nome inválido.").trim().  min(1, "Nome é obrigatório."),
-  email: z.email("E-mail inválido."),
-  password: z.string("Senha inválida.").min(8, "Senha inválida."),
-  passwordConfirmation: z.string("Senha inválida.").min(8, "Senha inválida."),
-})
-.refine((data) => {
-    return data.password === data.passwordConfirmation;
-}
-,{
-    error: "As senhas não coincidem.",
-    path: ["passwordConfirmation"],
-});
+const formSchema = z
+  .object({
+    name: z.string("Nome inválido.").trim().min(1, "Nome é obrigatório."),
+    email: z.email("E-mail inválido."),
+    password: z.string("Senha inválida.").min(8, "Senha inválida."),
+    passwordConfirmation: z.string("Senha inválida.").min(8, "Senha inválida."),
+  })
+  .refine(
+    (data) => {
+      return data.password === data.passwordConfirmation;
+    },
+    {
+      error: "As senhas não coincidem.",
+      path: ["passwordConfirmation"],
+    },
+  );
 
 type FormValues = z.infer<typeof formSchema>;
 
 const SignUpForm = () => {
-  const router  = useRouter();
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,7 +57,7 @@ const SignUpForm = () => {
     },
   });
 
-async function onSubmit(values: FormValues) {
+  async function onSubmit(values: FormValues) {
     await authClient.signUp.email({
       name: values.name,
       email: values.email,
@@ -65,18 +68,18 @@ async function onSubmit(values: FormValues) {
         },
         onError: (error) => {
           if (error.error.code === "USER_ALREADY_EXISTS") {
-            toast.error("E-mail já cadastrado.");
+            toast.error("E-mail já cadastrado.");
             return form.setError("email", {
-            message: "E-mail já cadastrado.",
-            });          
+              message: "E-mail já cadastrado.",
+            });
           }
           toast.error(error.error.message);
         },
-      }
-    }); 
-}
+      },
+    });
+  }
 
-return (
+  return (
     <>
       <Card className="w-full">
         <CardHeader>
@@ -86,7 +89,7 @@ return (
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <CardContent className="grid gap-6">
+            <CardContent className="grid w-full gap-6">
               <FormField
                 control={form.control}
                 name="name"
@@ -135,10 +138,10 @@ return (
                 name="passwordConfirmation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Confirme a senha</FormLabel>
+                    <FormLabel>Confirmar senha</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Digite sua senha novamente"
+                        placeholder="Digite a sua senha novamente"
                         type="password"
                         {...field}
                       />

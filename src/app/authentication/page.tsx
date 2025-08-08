@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/common/header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -14,7 +13,7 @@ const Authentication = async () => {
         <Tabs defaultValue="sign-in">
           <TabsList>
             <TabsTrigger value="sign-in">Entrar</TabsTrigger>
-            <TabsTrigger value="sign-up">Criar Conta</TabsTrigger>
+            <TabsTrigger value="sign-up">Criar conta</TabsTrigger>
           </TabsList>
           <TabsContent value="sign-in" className="w-full">
             <SignInForm />
@@ -26,6 +25,6 @@ const Authentication = async () => {
       </div>
     </>
   );
-}
+};
 
 export default Authentication;

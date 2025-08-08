@@ -18,10 +18,9 @@ const Home = async () => {
     orderBy: [desc(productTable.createdAt)],
     with: {
       variants: true,
-    }
+    },
   });
   const categories = await db.query.categoryTable.findMany({});
-
 
   return (
     <>
@@ -31,14 +30,14 @@ const Home = async () => {
           <Image
             src="/banner-01.png"
             alt="Leve uma vida com estilo"
-            width={0}
             height={0}
+            width={0}
             sizes="100vw"
             className="h-auto w-full"
           />
         </div>
 
-        <ProductList title="Mais vendidos" products={products} />
+        <ProductList products={products} title="Mais vendidos" />
 
         <div className="px-5">
           <CategorySelector categories={categories} />
@@ -48,18 +47,18 @@ const Home = async () => {
           <Image
             src="/banner-02.png"
             alt="Leve uma vida com estilo"
-            width={0}
             height={0}
+            width={0}
             sizes="100vw"
             className="h-auto w-full"
           />
         </div>
 
-        <ProductList title="Novos Produtos" products={newlyCreatedProducts} />
+        <ProductList products={newlyCreatedProducts} title="Novos produtos" />
         <Footer />
       </div>
     </>
   );
-}
+};
 
 export default Home;
