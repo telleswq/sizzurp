@@ -1,6 +1,7 @@
 "use client";
 
 import { MinusIcon, PlusIcon } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ const ProductActions = ({ productVariantId }: ProductActionsProps) => {
           quantity={quantity}
         />
         <Button className="rounded-full" size="lg">
-          Comprar agora
+          <Link href="/cart/identification">Comprar agora</Link>
         </Button>
       </div>
     </>
