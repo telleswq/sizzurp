@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
+import Footer from "@/components/common/footer";
 import { Button } from "@/components/ui/button";
 import {
   Card,

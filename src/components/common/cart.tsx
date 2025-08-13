@@ -80,6 +80,12 @@ export const Cart = () => {
               <Button className="mt-5 rounded-full" asChild>
                 <Link href="/cart/identification">Finalizar compra</Link>
               </Button>
+              <Link
+                href="/"
+                className="text-center text-sm font-medium underline underline-offset-2"
+              >
+                Continuar comprando
+              </Link>
             </div>
           )}
         </div>

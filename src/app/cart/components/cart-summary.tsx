@@ -24,9 +24,9 @@ const CartSummary = ({
   products,
 }: CartSummaryProps) => {
   return (
-    <Card>
+    <Card className="w-full md:sticky md:top-20 md:max-w-sm">
       <CardHeader>
-        <CardTitle>Resumo</CardTitle>
+        <CardTitle>Seu pedido</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex justify-between">
@@ -39,7 +39,7 @@ const CartSummary = ({
           <p className="text-sm">Frete</p>
           <p className="text-muted-foreground text-sm font-medium">GRÁTIS</p>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between font-semibold">
           <p className="text-sm">Total</p>
           <p className="text-muted-foreground text-sm font-medium">
             {formatCentsToBRL(totalInCents)}

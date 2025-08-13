@@ -116,271 +116,542 @@ const Addresses = ({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Identificação</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <>
+      <div className="md:hidden">
+        <Card>
+          <CardHeader>
+            <CardTitle>Identificação</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="py-4 text-center">
+                <p>Carregando endereços...</p>
+              </div>
+            ) : (
+              <RadioGroup
+                value={selectedAddress}
+                onValueChange={setSelectedAddress}
+              >
+                {addresses?.length === 0 && (
+                  <div className="py-4 text-center">
+                    <p className="text-muted-foreground">
+                      Você ainda não possui endereços cadastrados.
+                    </p>
+                  </div>
+                )}
+
+                {addresses?.map((address) => (
+                  <Card key={address.id}>
+                    <CardContent>
+                      <div className="flex items-start space-x-2">
+                        <RadioGroupItem value={address.id} id={address.id} />
+                        <div className="flex-1">
+                          <Label
+                            htmlFor={address.id}
+                            className="cursor-pointer"
+                          >
+                            <div>
+                              <p className="text-sm">
+                                {formatAddress(address)}
+                              </p>
+                            </div>
+                          </Label>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+
+                <Card>
+                  <CardContent>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="add_new" id="add_new" />
+                      <Label htmlFor="add_new">Adicionar novo endereço</Label>
+                    </div>
+                  </CardContent>
+                </Card>
+              </RadioGroup>
+            )}
+
+            {selectedAddress && selectedAddress !== "add_new" && (
+              <div className="mt-4">
+                <Button
+                  onClick={handleGoToPayment}
+                  className="w-full"
+                  disabled={updateCartShippingAddressMutation.isPending}
+                >
+                  {updateCartShippingAddressMutation.isPending
+                    ? "Processando..."
+                    : "Ir para pagamento"}
+                </Button>
+              </div>
+            )}
+
+            {selectedAddress === "add_new" && (
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="mt-4 space-y-4"
+                >
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Digite seu email" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="fullName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nome completo</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Digite seu nome completo"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="cpf"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>CPF</FormLabel>
+                          <FormControl>
+                            <PatternFormat
+                              format="###.###.###-##"
+                              placeholder="000.000.000-00"
+                              customInput={Input}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Celular</FormLabel>
+                          <FormControl>
+                            <PatternFormat
+                              format="(##) #####-####"
+                              placeholder="(11) 99999-9999"
+                              customInput={Input}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="zipCode"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>CEP</FormLabel>
+                          <FormControl>
+                            <PatternFormat
+                              format="#####-###"
+                              placeholder="00000-000"
+                              customInput={Input}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Endereço</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Digite seu endereço"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="number"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Número</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Digite o número" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="complement"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Complemento</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Apto, bloco, etc. (opcional)"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="neighborhood"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Bairro</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Digite o bairro" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Cidade</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Digite a cidade" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="state"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Estado</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Digite o estado" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={
+                      createShippingAddressMutation.isPending ||
+                      updateCartShippingAddressMutation.isPending
+                    }
+                  >
+                    {createShippingAddressMutation.isPending ||
+                    updateCartShippingAddressMutation.isPending
+                      ? "Salvando..."
+                      : "Salvar endereço"}
+                  </Button>
+                </form>
+              </Form>
+            )}
+          </CardContent>
+        </Card>{" "}
+      </div>
+      {/* ===== DESKTOP ===== */}
+      <div className="hidden rounded-lg bg-white p-6 shadow-sm md:block">
+        <h2 className="mb-6 text-lg font-medium">Identificação</h2>
+
         {isLoading ? (
-          <div className="py-4 text-center">
-            <p>Carregando endereços...</p>
-          </div>
+          <p className="text-muted-foreground text-center text-sm">
+            Carregando endereços...
+          </p>
         ) : (
           <RadioGroup
             value={selectedAddress}
             onValueChange={setSelectedAddress}
+            className="space-y-4"
           >
-            {addresses?.length === 0 && (
-              <div className="py-4 text-center">
-                <p className="text-muted-foreground">
-                  Você ainda não possui endereços cadastrados.
-                </p>
-              </div>
-            )}
-
             {addresses?.map((address) => (
-              <Card key={address.id}>
-                <CardContent>
-                  <div className="flex items-start space-x-2">
-                    <RadioGroupItem value={address.id} id={address.id} />
-                    <div className="flex-1">
-                      <Label htmlFor={address.id} className="cursor-pointer">
-                        <div>
-                          <p className="text-sm">{formatAddress(address)}</p>
-                        </div>
-                      </Label>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <div
+                key={address.id}
+                className="flex items-start gap-3 rounded-lg border p-4"
+              >
+                <RadioGroupItem value={address.id} id={address.id} />
+                <Label htmlFor={address.id} className="flex-1 cursor-pointer">
+                  <p className="text-sm">{formatAddress(address)}</p>
+                </Label>
+                
+              </div>
             ))}
 
-            <Card>
-              <CardContent>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="add_new" id="add_new" />
-                  <Label htmlFor="add_new">Adicionar novo endereço</Label>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Opção para adicionar novo endereço */}
+            <div className="flex items-center gap-3 rounded-lg border p-4">
+              <RadioGroupItem value="add_new" id="add_new" />
+              <Label htmlFor="add_new" className="cursor-pointer">
+                Adicionar novo
+              </Label>
+            </div>
           </RadioGroup>
         )}
 
+        {/* Se for endereço existente */}
         {selectedAddress && selectedAddress !== "add_new" && (
-          <div className="mt-4">
-            <Button
-              onClick={handleGoToPayment}
-              className="w-full"
-              disabled={updateCartShippingAddressMutation.isPending}
-            >
-              {updateCartShippingAddressMutation.isPending
-                ? "Processando..."
-                : "Ir para pagamento"}
-            </Button>
-          </div>
+          <Button
+            onClick={handleGoToPayment}
+            className="mt-6 w-full bg-primary text-white"
+            disabled={updateCartShippingAddressMutation.isPending}
+          >
+            {updateCartShippingAddressMutation.isPending
+              ? "Processando..."
+              : "Continuar com o pagamento"}
+          </Button>
         )}
 
+        {/* Se for adicionar novo endereço */}
         {selectedAddress === "add_new" && (
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="mt-4 space-y-4"
+              className="mt-6 grid grid-cols-2 gap-4"
             >
-              <div className="grid gap-4 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Digite seu email" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Digite seu email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="fullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome completo</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Digite seu nome completo"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Nome completo */}
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel>Nome completo</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Digite seu nome completo"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="cpf"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>CPF</FormLabel>
-                      <FormControl>
-                        <PatternFormat
-                          format="###.###.###-##"
-                          placeholder="000.000.000-00"
-                          customInput={Input}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* CPF */}
+              <FormField
+                control={form.control}
+                name="cpf"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>CPF</FormLabel>
+                    <FormControl>
+                      <PatternFormat
+                        format="###.###.###-##"
+                        placeholder="000.000.000-00"
+                        customInput={Input}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Celular</FormLabel>
-                      <FormControl>
-                        <PatternFormat
-                          format="(##) #####-####"
-                          placeholder="(11) 99999-9999"
-                          customInput={Input}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Celular */}
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Celular</FormLabel>
+                    <FormControl>
+                      <PatternFormat
+                        format="(##) #####-####"
+                        placeholder="(11) 99999-9999"
+                        customInput={Input}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="zipCode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>CEP</FormLabel>
-                      <FormControl>
-                        <PatternFormat
-                          format="#####-###"
-                          placeholder="00000-000"
-                          customInput={Input}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* CEP */}
+              <FormField
+                control={form.control}
+                name="zipCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>CEP</FormLabel>
+                    <FormControl>
+                      <PatternFormat
+                        format="#####-###"
+                        placeholder="00000-000"
+                        customInput={Input}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Endereço</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Digite seu endereço" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Endereço */}
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel>Endereço</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Digite seu endereço" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Número</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Digite o número" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Número */}
+              <FormField
+                control={form.control}
+                name="number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Número</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Digite o número" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="complement"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Complemento</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Apto, bloco, etc. (opcional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Complemento */}
+              <FormField
+                control={form.control}
+                name="complement"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Complemento</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Apto, bloco, etc." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="neighborhood"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bairro</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Digite o bairro" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Bairro */}
+              <FormField
+                control={form.control}
+                name="neighborhood"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Bairro</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Digite o bairro" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Cidade</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Digite a cidade" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Cidade */}
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cidade</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Digite a cidade" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={form.control}
-                  name="state"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Estado</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Digite o estado" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              {/* Estado */}
+              <FormField
+                control={form.control}
+                name="state"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Estado</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Digite o estado" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Botão salvar */}
+              <div className="col-span-2">
+                <Button
+                  type="submit"
+                  className="w-full bg-purple-600 text-white"
+                  disabled={
+                    createShippingAddressMutation.isPending ||
+                    updateCartShippingAddressMutation.isPending
+                  }
+                >
+                  {createShippingAddressMutation.isPending
+                    ? "Salvando..."
+                    : "Salvar endereço"}
+                </Button>
               </div>
-
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={
-                  createShippingAddressMutation.isPending ||
-                  updateCartShippingAddressMutation.isPending
-                }
-              >
-                {createShippingAddressMutation.isPending ||
-                updateCartShippingAddressMutation.isPending
-                  ? "Salvando..."
-                  : "Salvar endereço"}
-              </Button>
             </form>
           </Form>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </>
   );
 };
 
