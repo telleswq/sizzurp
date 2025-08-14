@@ -29,7 +29,7 @@ Estilizada com **Tailwind CSS** e utilizando **Drizzle ORM** para acesso a banco
 
 ## 📦 Instalação
 ```bash
-git clone https://github.com/seu-usuario/sizzurp.git
+git clone https://github.com/telleswq/sizzurp.git
 cd sizzurp
 npm install
 ```
